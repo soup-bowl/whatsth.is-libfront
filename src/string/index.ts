@@ -1,4 +1,4 @@
-import UAParser from "ua-parser-js"
+import { UAParser } from "ua-parser-js"
 import { UserAgent } from "./interfaces"
 
 /**
@@ -81,23 +81,22 @@ export const getCountryFlag = (countryCode: string): string | null => {
  * @returns A split-up UserAgent object.
  */
 export const getUserAgent = (userAgent = window.navigator.userAgent): UserAgent => {
-	const uaParser = new UAParser()
-	uaParser.setUA(userAgent)
+	const { browser, engine, os, cpu, device } = UAParser(userAgent)
 
 	return {
 		browser: {
-			name: uaParser.getBrowser().name ?? "",
-			version: uaParser.getBrowser().version ?? "",
+			name: browser.name ?? "",
+			version: browser.version ?? "",
 		},
 		engine: {
-			name: uaParser.getEngine().name ?? "",
-			version: uaParser.getEngine().version ?? "",
+			name: engine.name ?? "",
+			version: engine.version ?? "",
 		},
 		system: {
-			name: uaParser.getOS().name ?? "",
-			version: uaParser.getOS().version ?? "",
+			name: os.name ?? "",
+			version: os.version ?? "",
 		},
-		cpu: uaParser.getCPU().architecture,
-		device: uaParser.getDevice().model,
+		cpu: cpu.architecture,
+		device: device.model,
 	}
 }
